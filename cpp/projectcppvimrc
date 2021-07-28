@@ -1,0 +1,16 @@
+set makeprg=make\ -C\ cmake-build-debug\ -j12
+set tabstop=4
+nnoremap <C-B> :make!<cr> 
+nnoremap <C-R> :!./cmake-build-debug/bin/ImFusionSuite<cr>
+nnoremap <C-L> :BLines<cr>
+nnoremap <C-A> :Ag<cr>
+nnoremap <C-F> :Files<cr>
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+"generate compile_commands.json:
+" CMAKE_EXPORT_COMPILE_COMMANDS=1
+" cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 
