@@ -1,0 +1,7 @@
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt update
+sudo apt install neovim
+
+# install nodejs >= 14
+# install clangd-10
+sudo apt install clangd-10 clang-10
