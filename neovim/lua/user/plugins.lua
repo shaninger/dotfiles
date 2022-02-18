@@ -10,7 +10,7 @@ use "wbthomason/packer.nvim"
 use "nvim-lua/popup.nvim"
 use "nvim-lua/plenary.nvim"
 use {'dracula/vim', as = 'dracula'}
--- use {'doums/darcula', as = 'dracula'}
+use {'doums/darcula'}
 use "hrsh7th/nvim-cmp"
 use "neovim/nvim-lspconfig"
 -- use "williamboman/nvim-lsp-installer"
