@@ -13,6 +13,11 @@ use {'dracula/vim', as = 'dracula'}
 use {'doums/darcula'}
 use "hrsh7th/nvim-cmp"
 use "neovim/nvim-lspconfig"
+use { 'junegunn/fzf', run = './install --bin', }
+use { 'ibhagwan/fzf-lua',
+  -- optional for icon support
+  requires = { 'kyazdani42/nvim-web-devicons' }
+}
 -- use "williamboman/nvim-lsp-installer"
 end)
 
