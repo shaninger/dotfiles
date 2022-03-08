@@ -1,10 +1,7 @@
--- todo: setup super tab
--- todo: add snippet engine
-
 local cmp_status_ok, cmp = pcall(require, 'cmp')
-if not cmp_satus_ok then
+if not cmp_status_ok then
 	return
-end 
+end
 
 local snip_status_ok, luasnip = pcall(require, 'luasnip')
 if not snip_status_ok then
