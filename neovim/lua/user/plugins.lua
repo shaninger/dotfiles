@@ -9,10 +9,23 @@ packer.startup(function(use)
 use "wbthomason/packer.nvim"
 use "nvim-lua/popup.nvim"
 use "nvim-lua/plenary.nvim"
+
+-- colorschemes
 use {'dracula/vim', as = 'dracula'}
 use {'doums/darcula'}
+
+-- completion
 use "hrsh7th/nvim-cmp"
+use "hrsh7th/cmp-buffer"
+use "hrsh7th/cmp-path"
+use "hrsh7th/cmp-nvim-lsp"
+use "L3MON4D3/LuaSnip"
+use "saadparwaiz1/cmp_luasnip"
+
+-- lsp
 use "neovim/nvim-lspconfig"
+
+-- fuzzy search
 use { 'junegunn/fzf', run = './install --bin', }
 --use { 'ibhagwan/fzf-lua',
   -- optional for icon support

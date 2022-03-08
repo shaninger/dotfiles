@@ -1,6 +1,7 @@
 require "user.options"
 require "user.keymap"
 require "user.plugins"
+require "user.cmp"
 require "user.lsp"
 
 -- set local config for cpp project
