@@ -25,6 +25,12 @@ use "saadparwaiz1/cmp_luasnip"
 -- lsp
 use "neovim/nvim-lspconfig"
 
+-- git signs
+use "lewis6991/gitsigns.nvim"
+
+-- bufferline
+use "akinsho/bufferline.nvim"
+
 -- fuzzy search
 use { 'junegunn/fzf', run = './install --bin', }
 --use { 'ibhagwan/fzf-lua',
