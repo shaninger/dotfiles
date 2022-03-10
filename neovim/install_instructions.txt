@@ -5,3 +5,8 @@ sudo apt install neovim
 # install nodejs >= 14
 # install clangd-10
 sudo apt install clangd-10 clang-10
+
+# download nerdfonts from https://www.nerdfonts.com/font-downloads
+# copy to ~/.local/share/fonts
+# rebuild font cache:
+fc-cache -fv
