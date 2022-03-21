@@ -30,6 +30,14 @@ use "lewis6991/gitsigns.nvim"
 
 -- bufferline
 use "akinsho/bufferline.nvim"
+use "moll/vim-bbye"
+
+-- file browser
+use 'kyazdani42/nvim-web-devicons'
+use 'kyazdani42/nvim-tree.lua'
+
+-- auto pairs
+ use "windwp/nvim-autopairs"
 
 -- fuzzy search
 use { 'junegunn/fzf', run = './install --bin', }

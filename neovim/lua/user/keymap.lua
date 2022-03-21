@@ -6,6 +6,13 @@ keymap("n", "<C-h>", "<C-w>h", opts)
 keymap("n", "<C-j>", "<C-w>j", opts)
 keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
-keymap("n", "<C-f>", "<cmd>lua require('fzf-lua').files()<CR>", opts)
+
+--keymap("n", "<C-f>", "<cmd>lua require('fzf-lua').files()<CR>", opts)
+-- buffer shortcuts
+keymap("n", "<S-l>", ":bnext<CR>", opts)
+keymap("n", "<S-h>", ":bprevious<CR>", opts)
+keymap("n", "<S-x>", ":Bdelete<CR>", opts)
+
+keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
 --keymap("n", "jj", "<esc>", iopts)
 vim.cmd "inoremap jj <esc>"
