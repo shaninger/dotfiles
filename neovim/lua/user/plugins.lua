@@ -9,6 +9,7 @@ packer.startup(function(use)
 use "wbthomason/packer.nvim"
 use "nvim-lua/popup.nvim"
 use "nvim-lua/plenary.nvim"
+use "numToStr/Comment.nvim"
 
 -- colorschemes
 use {'dracula/vim', as = 'dracula'}
@@ -39,13 +40,9 @@ use 'kyazdani42/nvim-tree.lua'
 -- auto pairs
  use "windwp/nvim-autopairs"
 
--- fuzzy search
-use { 'junegunn/fzf', run = './install --bin', }
---use { 'ibhagwan/fzf-lua',
-  -- optional for icon support
---  requires = { 'kyazdani42/nvim-web-devicons' }
---}
-use "junegunn/fzf.vim"
+-- Telescope
+use "nvim-telescope/telescope.nvim"
+
 -- use "williamboman/nvim-lsp-installer"
 end)
 

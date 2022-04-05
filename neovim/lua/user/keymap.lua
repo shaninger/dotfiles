@@ -13,6 +13,14 @@ keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
 keymap("n", "<S-x>", ":Bdelete<CR>", opts)
 
+-- fuzzy search
+keymap("n", "<C-N>", ":Telescope find_files<CR>", opts)
+keymap("n", "<C-F>", ":Telescope current_buffer_fuzzy_find<CR>", opts)
+keymap("n", "<S-F>", ":Telescope live_grep<CR>", opts)
+
+-- file browser
 keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+
+-- cancel insertion mode
 --keymap("n", "jj", "<esc>", iopts)
 vim.cmd "inoremap jj <esc>"

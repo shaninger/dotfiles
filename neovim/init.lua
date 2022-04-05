@@ -7,6 +7,7 @@ require "user.bufferline"
 require "user.autopairs"
 require "user.nvim-tree"
 require "user.keymap"
+require "user.telescope"
 
 -- set local config for cpp project
 curdir=vim.fn.getcwd()
