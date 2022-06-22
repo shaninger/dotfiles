@@ -34,3 +34,11 @@ emerge x11-misc/dmenu
 git clone https://github.com/stark/siji && cd siji
 ./install.sh
 cd
+
+#install zsh
+emerge app-shells/zsh
+#set zsh as default as user: chsh -s /bin/zsh
+#install oh-my-zsh:
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# if troubles: create .zshrc manually and reboot (after setting zsh as default)
+
