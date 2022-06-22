@@ -1,1 +1,5 @@
-exec i3
+exec i3 > /tmp/i3.log 2>&1
+
+#for siji fonts -> used by polybar
+xset +fp /home/stefan/.local/share/fonts
+xset fp rehash
