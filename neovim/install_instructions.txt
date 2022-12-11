@@ -10,3 +10,5 @@ sudo apt install clangd-10 clang-10
 # copy to ~/.local/share/fonts
 # rebuild font cache:
 fc-cache -fv
+
+#move files to ~/.config/nvim

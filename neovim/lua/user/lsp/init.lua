@@ -49,18 +49,20 @@ if not status_ok then
     return
 end
 
+vim.lsp.set_log_level("debug")
+
 capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { 'clangd' }
+local servers = { 'ccls' }
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup {
     on_attach = on_attach,
-		cmd = {'clangd-10'},
+		cmd = {'ccls', '-v=1', '--log-file=lololog.txt'},
     flags = {
       -- This will be the default in neovim 0.7+
-      debounce_text_changes = 150,
+	  --debounce_text_changes = 150,
     },
 	capabilities=capabilities
   }
