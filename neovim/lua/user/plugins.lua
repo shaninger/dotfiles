@@ -15,12 +15,12 @@ use "wbthomason/packer.nvim"
 use {'doums/darcula'}
 
 -- completion
--- use "hrsh7th/nvim-cmp"
--- use "hrsh7th/cmp-buffer"
--- use "hrsh7th/cmp-path"
--- use "hrsh7th/cmp-nvim-lsp"
--- use "L3MON4D3/LuaSnip"
--- use "saadparwaiz1/cmp_luasnip"
+use "hrsh7th/nvim-cmp"
+use "hrsh7th/cmp-buffer"
+use "hrsh7th/cmp-path"
+use "hrsh7th/cmp-nvim-lsp"
+use "L3MON4D3/LuaSnip"
+use "saadparwaiz1/cmp_luasnip"
 
 -- lsp
 use "neovim/nvim-lspconfig"
@@ -29,15 +29,15 @@ use "neovim/nvim-lspconfig"
 use "lewis6991/gitsigns.nvim"
 
 -- bufferline
--- use "akinsho/bufferline.nvim"
--- use "moll/vim-bbye"
+use "akinsho/bufferline.nvim"
+use "moll/vim-bbye"
 
 -- file browser
 -- use 'kyazdani42/nvim-web-devicons'
 -- use 'kyazdani42/nvim-tree.lua'
 
 -- auto pairs
--- use "windwp/nvim-autopairs"
+use "windwp/nvim-autopairs"
 
 -- Telescope
 use "nvim-telescope/telescope.nvim"

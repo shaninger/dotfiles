@@ -51,7 +51,7 @@ end
 
 vim.lsp.set_log_level("debug")
 
-capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
