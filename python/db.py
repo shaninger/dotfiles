@@ -1,6 +1,5 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from chromedriver_py import binary_path
 from bs4 import BeautifulSoup
@@ -38,21 +37,31 @@ def selenium_scraper(url):
 def search_in_html(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    target_element = 'reise-preis__preis'
     # Find all instances of the target HTML element
-    target_elements = soup.find_all('span', class_=target_element)
+    def find_element(target_element):
+        target_elements = soup.find_all('span', class_=target_element)
+        retVal = []
+        if target_elements:
+            for element in target_elements:
+                retVal.append(element)
+        return retVal
 
+    prices_elements = find_element('reise-preis__preis')
     prices = []
+    for element in prices_elements:
+        prices.append(float(element.contents[0].split('\xa0')[0].replace(',', '.')))
 
-    if target_elements:
-        for element in target_elements:
-            prices.append(float(element.contents[0].split('\xa0')[0].replace(',', '.')))
-    else:
-        print(f"No instances of '{target_element}' found in the HTML content.")
-    return prices
+    duration_elements = find_element('dauer-umstieg__dauer')
+    duration = []
+    for element in duration_elements:
+        duration.append(int(element.contents[0].split('h')[0]))
+
+    assert len(prices) == len(duration)
+    return prices, duration
 
 
-def calculate_trip(start_date, end_date, direction='munich_to_berlin', trip_days=[5, 6, 7], time='17:00') -> list[
+def calculate_trip(start_date, end_date, direction='munich_to_berlin', trip_days=[5, 6, 7], time='17:00',
+                   max_duration=5) -> list[
     tuple[float, dict[str, float]]]:
     if not direction in ['munich_to_berlin', 'berlin_to_munich']:
         raise ValueError('Wrong input to parameter \"direction\"')
@@ -66,17 +75,24 @@ def calculate_trip(start_date, end_date, direction='munich_to_berlin', trip_days
 
         html_content = selenium_scraper(trip_to_berlin)
         if not html_content is None:
-            prices_to_berlin = search_in_html(html_content)
+            prices_to_berlin, duration_to_berlin = search_in_html(html_content)
+            cheapest_price = min(zip(prices_to_berlin, duration_to_berlin), key=lambda x: x[0] if x[1] < max_duration else float('inf')) if len(
+                prices_to_berlin) > 0 and len(duration_to_berlin) > 0 else (None, None)
             print(
-                f'Trip Munich to Berlin -> day: {date}, cheapest price: {min(prices_to_berlin) if len(prices_to_berlin) > 0 else None}{"€" if len(prices_to_berlin) > 0 else ""}')
-            all_prices_to_berlin[date] = min(prices_to_berlin) if len(prices_to_berlin) > 0 else None
+                f'Trip Munich to Berlin -> day: {date}, cheapest price: {cheapest_price[0]}{"€" if not cheapest_price[0] is None else ""}' \
+                + f', duration: {cheapest_price[1]}{"h" if not cheapest_price[1] is None else ""}')
+            all_prices_to_berlin[date] = cheapest_price
 
         html_content = selenium_scraper(trip_to_munich)
         if not html_content is None:
-            prices_to_munich = search_in_html(html_content)
+            prices_to_munich, duration_to_munich = search_in_html(html_content)
+            cheapest_price = min(zip(prices_to_munich, duration_to_munich), key=lambda x: x[0] if x[1] < max_duration else float('inf')) if len(
+                prices_to_munich) > 0 and len(duration_to_munich) > 0 else (None, None)
             print(
-                f'Trip Berlin to Munich -> day: {date}, cheapest price: {min(prices_to_munich) if len(prices_to_munich) > 0 else None}{"€" if len(prices_to_munich) > 0 else ""}')
-            all_prices_to_munich[date] = min(prices_to_munich) if len(prices_to_munich) > 0 else None
+                f'Trip Berlin to Munich -> day: {date}, cheapest price: {cheapest_price[0]}{"€" if not cheapest_price[0] is None else ""}' \
+                + f', duration: {cheapest_price[1]}{"h" if not cheapest_price[1] is None else ""}')
+
+            all_prices_to_munich[date] = cheapest_price
 
     complete_trips = []
     if direction == 'munich_to_berlin':
@@ -91,20 +107,23 @@ def calculate_trip(start_date, end_date, direction='munich_to_berlin', trip_days
             trip_forth_date_str = str(trip_forth_date)
             trip_back_date_str = str(trip_back_date)
             if not trip_back_date_str in all_prices_back.keys() or all_prices_back[
-                trip_back_date_str] is None or all_prices_forth[trip_forth_date_str] is None:
+                trip_back_date_str] == (None, None) or all_prices_forth[trip_forth_date_str] == (None, None):
                 continue
 
-            complete_trips.append(
-                (all_prices_forth[trip_forth_date_str] + all_prices_back[trip_back_date_str], {
-                    trip_forth_date_str: all_prices_forth[trip_forth_date_str],
-                    trip_back_date_str: all_prices_back[trip_back_date_str]}))
+            if all_prices_forth[trip_forth_date_str][1] < max_duration and all_prices_back[trip_back_date_str][
+                1] < max_duration:
+                complete_trips.append(
+                    (all_prices_forth[trip_forth_date_str][0] + all_prices_back[trip_back_date_str][0], {
+                        trip_forth_date_str: all_prices_forth[trip_forth_date_str],
+                        trip_back_date_str: all_prices_back[trip_back_date_str]}))
 
     return complete_trips
 
 
 if __name__ == "__main__":
-    start_date = date(2024, 3, 22)
-    end_date = date(2024, 4, 7)
-    complete_trips = calculate_trip(start_date, end_date, 'berlin_to_munich', [5, 6, 7])
+    start_date = date(2024, 3, 1)
+    end_date = date(2024, 3, 22)
+    complete_trips = calculate_trip(start_date, end_date, 'munich_to_berlin', [5, 6, 7])
     for k, v in sorted(complete_trips, key=lambda x: x[0]):
-        print(f'{k:.2f} -> {v}')
+        items = list(v.items())
+        print(f'{k:.2f}€ -> Starting a {items[0][1][1]}h trip at {items[0][0]} and going back {items[1][1][1]}h at {items[1][0]}')
