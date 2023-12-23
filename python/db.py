@@ -20,7 +20,7 @@ def selenium_scraper(url):
 
         # Give the page some time to load JavaScript-generated content
         # some entries won't load if the sleep time is too short
-        T.sleep(4)
+        T.sleep(10)
 
         html_content = driver.page_source
 
@@ -59,6 +59,11 @@ def search_in_html(html_content):
     assert len(prices) == len(duration)
     return prices, duration
 
+def create_link_to_berlin(date, time):
+    return f'https://www.bahn.de/buchung/fahrplan/suche#sts=true&so=M%C3%BCnchen%20Hbf&zo=Berlin%20Hbf&kl=2&r=13:16:KLASSENLOS:1&soid=A%3D1%40O%3DM%C3%BCnchen%20Hbf%40X%3D11558339%40Y%3D48140229%40U%3D81%40L%3D8000261%40B%3D1%40p%3D1702504538%40i%3DU%C3%97008020347%40&zoid=A%3D1%40O%3DBerlin%20Hbf%40X%3D13369549%40Y%3D52525589%40U%3D81%40L%3D8011160%40B%3D1%40p%3D1702504538%40i%3DU%C3%97008065969%40&sot=ST&zot=ST&soei=8000261&zoei=8011160&hd={date}T{time}:36&hza=D&ar=false&s=true&d=true&hz=%5B%5D&fm=false&bp=false'
+
+def create_link_to_munich(date, time):
+    return f'https://www.bahn.de/buchung/fahrplan/suche#sts=true&so=Berlin%20Hbf&zo=M%C3%BCnchen%20Hbf&kl=2&r=13:16:KLASSENLOS:1&soid=A%3D1%40O%3DBerlin%20Hbf%40X%3D13369549%40Y%3D52525589%40U%3D81%40L%3D8011160%40B%3D1%40p%3D1702504538%40i%3DU%C3%97008065969%40&zoid=A%3D1%40O%3DM%C3%BCnchen%20Hbf%40X%3D11558339%40Y%3D48140229%40U%3D81%40L%3D8000261%40B%3D1%40p%3D1702504538%40i%3DU%C3%97008020347%40&sot=ST&zot=ST&soei=8011160&zoei=8000261&hd={date}T{time}:36&hza=D&ar=false&s=true&d=true&hz=%5B%5D&fm=false&bp=false'
 
 def calculate_trip(start_date, end_date, direction='munich_to_berlin', trip_days=[5, 6, 7], time='17:00',
                    max_duration=5) -> list[
@@ -70,8 +75,8 @@ def calculate_trip(start_date, end_date, direction='munich_to_berlin', trip_days
     all_prices_to_berlin = {}
     for trip_forth_date in (start_date + timedelta(n) for n in range(day_count)):
         date = trip_forth_date.strftime("%Y-%m-%d")
-        trip_to_berlin = f'https://www.bahn.de/buchung/fahrplan/suche#sts=true&so=M%C3%BCnchen%20Hbf&zo=Berlin%20Hbf&kl=2&r=13:16:KLASSENLOS:1&soid=A%3D1%40O%3DM%C3%BCnchen%20Hbf%40X%3D11558339%40Y%3D48140229%40U%3D81%40L%3D8000261%40B%3D1%40p%3D1702504538%40i%3DU%C3%97008020347%40&zoid=A%3D1%40O%3DBerlin%20Hbf%40X%3D13369549%40Y%3D52525589%40U%3D81%40L%3D8011160%40B%3D1%40p%3D1702504538%40i%3DU%C3%97008065969%40&sot=ST&zot=ST&soei=8000261&zoei=8011160&hd={date}T{time}:36&hza=D&ar=false&s=true&d=true&hz=%5B%5D&fm=false&bp=false'
-        trip_to_munich = f'https://www.bahn.de/buchung/fahrplan/suche#sts=true&so=Berlin%20Hbf&zo=M%C3%BCnchen%20Hbf&kl=2&r=13:16:KLASSENLOS:1&soid=A%3D1%40O%3DBerlin%20Hbf%40X%3D13369549%40Y%3D52525589%40U%3D81%40L%3D8011160%40B%3D1%40p%3D1702504538%40i%3DU%C3%97008065969%40&zoid=A%3D1%40O%3DM%C3%BCnchen%20Hbf%40X%3D11558339%40Y%3D48140229%40U%3D81%40L%3D8000261%40B%3D1%40p%3D1702504538%40i%3DU%C3%97008020347%40&sot=ST&zot=ST&soei=8011160&zoei=8000261&hd={date}T{time}:36&hza=D&ar=false&s=true&d=true&hz=%5B%5D&fm=false&bp=false'
+        trip_to_berlin = create_link_to_berlin(date, time)
+        trip_to_munich = create_link_to_munich(date, time)
 
         html_content = selenium_scraper(trip_to_berlin)
         if not html_content is None:
@@ -119,11 +124,25 @@ def calculate_trip(start_date, end_date, direction='munich_to_berlin', trip_days
 
     return complete_trips
 
+def pretty_print_trip(cost, trip):
+    print(
+        f'{cost:.2f}€ -> Starting a {trip[0][1][1]}h trip at {trip[0][0]} and going back {trip[1][1][1]}h at {trip[1][0]}')
 
 if __name__ == "__main__":
     start_date = date(2024, 3, 1)
     end_date = date(2024, 3, 22)
-    complete_trips = calculate_trip(start_date, end_date, 'munich_to_berlin', [5, 6, 7])
-    for k, v in sorted(complete_trips, key=lambda x: x[0]):
-        items = list(v.items())
-        print(f'{k:.2f}€ -> Starting a {items[0][1][1]}h trip at {items[0][0]} and going back {items[1][1][1]}h at {items[1][0]}')
+    trip_stefan = calculate_trip(start_date, end_date, 'munich_to_berlin', [5, 6, 7])
+
+    start_date_hanka = date(2024, 3, 22)
+    end_date_hanka = date(2024, 4, 7)
+    trip_hanka = calculate_trip(start_date_hanka, end_date_hanka, 'berlin_to_munich', [5, 6, 7])
+
+    def print_trip(trip):
+        for k, v in sorted(trip, key=lambda x: x[0]):
+            items = list(v.items())
+            pretty_print_trip(k, items)
+
+    print('Stefan comes to Berlin:')
+    print_trip(trip_stefan)
+    print('\nHanka comes to Munich')
+    print_trip(trip_hanka)
